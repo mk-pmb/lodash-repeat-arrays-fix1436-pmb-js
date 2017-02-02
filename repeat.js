@@ -45,7 +45,7 @@ module.exports = (function () {
     }
 
     function repeat(string, n, guard) {
-      if ((guard ? isIterateeCall(string, n, guard) : n === undefined)) {
+      if (((guard ? isIterateeCall(string, n, guard) : n) === undefined)) {
         n = 1;
       } else {
         n = toInteger(n);
