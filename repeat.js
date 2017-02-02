@@ -15,7 +15,6 @@ module.exports = (function () {
   var lodash,
     nativeFloor = Math.floor,
     toInteger = Math.round,
-    toString = String,
     MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
 
   lodash = (function preserveLodashIndent() {
@@ -24,33 +23,33 @@ module.exports = (function () {
 
     //----- 8< ----- 8< ----- lodash code ----- 8< ----- 8< -----//
 
-    function baseRepeat(string, n) {
-      var result = '';
-      if (!string || n < 1 || n > MAX_SAFE_INTEGER) {
+    function baseRepeat(orig, n) {
+      var result = orig.slice(0, 0);
+      if (!orig || n < 1 || n > MAX_SAFE_INTEGER) {
         return result;
       }
       // Leverage the exponentiation by squaring algorithm for a faster repeat.
       // See https://en.wikipedia.org/wiki/Exponentiation_by_squaring for more details.
       do {
         if (n % 2) {
-          result += string;
+          result = result.concat(orig);
         }
         n = nativeFloor(n / 2);
         if (n) {
-          string += string;
+          orig = orig.concat(orig);
         }
       } while (n);
 
       return result;
     }
 
-    function repeat(string, n, guard) {
-      if (((guard ? isIterateeCall(string, n, guard) : n) === undefined)) {
+    function repeat(orig, n, guard) {
+      if (((guard ? isIterateeCall(orig, n, guard) : n) === undefined)) {
         n = 1;
       } else {
         n = toInteger(n);
       }
-      return baseRepeat(toString(string), n);
+      return baseRepeat(orig, n);
     }
 
     //----- >8 ----- >8 ----- lodash code ----- >8 ----- >8 -----//

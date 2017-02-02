@@ -1,5 +1,5 @@
 { "name": "lodash-repeat-arrays-fix1436-pmb",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A repeat function based on lodash's but with array and buffer support.",
   "keywords": [
     "array",

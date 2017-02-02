@@ -5,8 +5,13 @@
 var r = require('../repeat.js').repeat, eq = require('assert').deepStrictEqual;
 
 eq(r('ol', 3), 'ololol');
+console.log('+OK string');
+
 eq(r(['ol'], 3), ['ol', 'ol', 'ol']);
+console.log('+OK array');
+
 eq(r(Buffer.from('ol'), 3), Buffer.from('ololol'));
+console.log('+OK buffer');
 
 
 
