@@ -12,10 +12,20 @@
 
 
 module.exports = (function () {
+
+  function retFalse() { return false; }
+
+  function withArgPairArray(f) {
+    return function (a, b) { return f([a, b]); };
+  }
+
   var lodash,
     nativeFloor = Math.floor,
     toInteger = Math.round,
-    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
+    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER,
+    hasBuffer = ((typeof Buffer)[0] !== 'u'),  // o(bject) or f(unction)
+    isBuffer = (hasBuffer ? Buffer.isBuffer : retFalse),
+    concatBuffers = (hasBuffer && withArgPairArray(Buffer.concat));
 
   lodash = (function preserveLodashIndent() {
     function isIterateeCall() { return false; }
@@ -24,7 +34,12 @@ module.exports = (function () {
     //----- 8< ----- 8< ----- lodash code ----- 8< ----- 8< -----//
 
     function baseRepeat(orig, n) {
-      var result = orig.slice(0, 0);
+      var result = orig.slice(0, 0), concat;
+
+      concat = ((orig.concat && function (a, b) { return a.concat(b); })
+        || (isBuffer(orig) && concatBuffers)
+        );
+
       if (!orig || n < 1 || n > MAX_SAFE_INTEGER) {
         return result;
       }
@@ -32,11 +47,11 @@ module.exports = (function () {
       // See https://en.wikipedia.org/wiki/Exponentiation_by_squaring for more details.
       do {
         if (n % 2) {
-          result = result.concat(orig);
+          result = concat(result, orig);
         }
         n = nativeFloor(n / 2);
         if (n) {
-          orig = orig.concat(orig);
+          orig = concat(orig, orig);
         }
       } while (n);
 
